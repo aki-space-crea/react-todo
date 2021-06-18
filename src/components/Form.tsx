@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-
-type Todo = {
-  value: string;
-  id: number;
-};
+import { TodoType } from "../types/todo";
 
 type Props = {
-  todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  todos: TodoType[];
+  setTodos: React.Dispatch<React.SetStateAction<TodoType[]>>;
 };
 
 const Form: React.VFC<Props> = ({ todos, setTodos }) => {
@@ -22,7 +18,7 @@ const Form: React.VFC<Props> = ({ todos, setTodos }) => {
       return;
     }
 
-    const newTodo: Todo = {
+    const newTodo: TodoType = {
       value: text,
       id: new Date().getTime()
     };

@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 
 import Form from "./components/Form";
-
-type Todo = {
-  value: string;
-  id: number;
-};
+import { TodoType } from "./types/todo";
 
 const App: React.VFC = () => {
   const [editText, setEditText] = useState("");
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<TodoType[]>([]);
   const [editFlag, setEditFlag] = useState(false);
-  const [deletedList, setDeletedList] = useState<Todo[]>([]);
+  const [deletedList, setDeletedList] = useState<TodoType[]>([]);
 
   const handleEdit = (
     e: React.FormEvent<HTMLFormElement | HTMLInputElement>
@@ -30,11 +26,11 @@ const App: React.VFC = () => {
     todoIndex: number
   ) => {
     const copyTodos = [...todos];
-    const deletedTodo: Todo[] = copyTodos.filter((_, index) => {
+    const deletedTodo: TodoType[] = copyTodos.filter((_, index) => {
       return todoIndex === index;
     });
 
-    const notDeletedTodo: Todo[] = copyTodos.filter((_, index) => {
+    const notDeletedTodo: TodoType[] = copyTodos.filter((_, index) => {
       return todoIndex !== index;
     });
 
