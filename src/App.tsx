@@ -1,35 +1,17 @@
 import React, { useState } from "react";
 
+import Form from "./components/Form";
+
 type Todo = {
   value: string;
   id: number;
 };
 
 const App: React.VFC = () => {
-  const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editFlag, setEditFlag] = useState(false);
   const [deletedList, setDeletedList] = useState<Todo[]>([]);
-
-  const handleSubmit = (
-    e: React.FormEvent<HTMLFormElement | HTMLInputElement>
-  ) => {
-    e.preventDefault();
-
-    if (!text) {
-      return;
-    }
-
-    const newTodo: Todo = {
-      value: text,
-      id: new Date().getTime()
-    };
-
-    setTodos([newTodo, ...todos]);
-
-    setText("");
-  };
 
   const handleEdit = (
     e: React.FormEvent<HTMLFormElement | HTMLInputElement>
@@ -62,15 +44,7 @@ const App: React.VFC = () => {
 
   return (
     <>
-      <form onSubmit={e => handleSubmit(e)}>
-        <input
-          type="text"
-          value={text}
-          placeholder="入力してください"
-          onChange={e => setText(e.target.value)}
-        />
-        <input type="submit" value="登録" onSubmit={e => handleSubmit(e)} />
-      </form>
+      <Form todos={todos} setTodos={setTodos} />
       <ul>
         {todos.map((todo, todoIndex) => {
           return (
