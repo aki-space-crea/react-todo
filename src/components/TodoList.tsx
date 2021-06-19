@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import { TodoType } from "../types/todo";
 
 type Props = {
@@ -21,10 +19,34 @@ const TodoList: React.VFC<Props> = props => {
     setDeletedList
   } = props;
 
-  const [editFlag, setEditFlag] = useState(false);
+  const handleToggleEdit = (
+    e: React.FormEvent<HTMLFormElement | HTMLInputElement>,
+    todoIndex: number
+  ) => {
+    e.preventDefault();
 
-  const handleEdit = (
-    e: React.FormEvent<HTMLFormElement | HTMLInputElement>
+    const deepCopyTodo = JSON.parse(JSON.stringify(todos));
+
+    if (todos[todoIndex].edit) {
+      // キャンセルボタンを押した後
+      deepCopyTodo[todoIndex].edit = false;
+    } else {
+      // 編集ボタンを押した後
+      deepCopyTodo[todoIndex].edit = true;
+    }
+
+    setTodos(deepCopyTodo);
+
+    if (!editText) {
+      return;
+    }
+
+    setEditText("");
+  };
+
+  const handleEditText = (
+    e: React.FormEvent<HTMLFormElement | HTMLInputElement>,
+    todoIndex: number
   ) => {
     e.preventDefault();
 
@@ -32,6 +54,14 @@ const TodoList: React.VFC<Props> = props => {
       return;
     }
 
+    const deepCopyTodo = JSON.parse(JSON.stringify(todos));
+
+    deepCopyTodo[todoIndex].value = editText;
+
+    setTodos(deepCopyTodo);
+
+    // キャンセルボタンを押した後
+    deepCopyTodo[todoIndex].edit = false;
     setEditText("");
   };
 
@@ -57,10 +87,11 @@ const TodoList: React.VFC<Props> = props => {
       <p>todoList</p>
       <ul>
         {todos.map((todo, todoIndex) => {
+          const edit = todo.edit;
           return (
             <li key={todo.id}>
               {todo.value}
-              {editFlag ? (
+              {todo.edit ? (
                 <>
                   <input
                     type="text"
@@ -74,7 +105,7 @@ const TodoList: React.VFC<Props> = props => {
                     type="button"
                     onClick={e => {
                       e.preventDefault();
-                      handleEdit(e);
+                      handleEditText(e, todoIndex);
                     }}
                     value="完了"
                   />
@@ -83,14 +114,13 @@ const TodoList: React.VFC<Props> = props => {
                 ""
               )}
               <form>
-                {editFlag ? (
+                {edit ? (
                   <input
                     type="button"
                     onClick={e => {
                       e.preventDefault();
-                      setEditFlag(!editFlag);
+                      handleToggleEdit(e, todoIndex);
                     }}
-                    onSubmit={() => setEditText("")}
                     value="キャンセル"
                   />
                 ) : (
@@ -99,6 +129,7 @@ const TodoList: React.VFC<Props> = props => {
                       type="button"
                       onClick={e => {
                         e.preventDefault();
+                        handleToggleEdit(e, todoIndex);
                       }}
                       value="編集"
                     />

@@ -20,7 +20,8 @@ const Form: React.VFC<Props> = ({ todos, setTodos }) => {
 
     const newTodo: TodoType = {
       value: text,
-      id: new Date().getTime()
+      id: new Date().getTime(),
+      edit: false
     };
 
     setTodos([newTodo, ...todos]);
