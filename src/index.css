@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 10px;
 }
 
 code {
@@ -12,33 +13,7 @@ code {
     monospace;
 }
 
-body {
-  padding: 50px;
-}
-
-#root > section > section {
-  width: 500px;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.input-area {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-.input-area label {
-  display: block;
-  width: 100%;
-}
-
-.todo-list li {
-  margin-top: 30px;
-  cursor: pointer;
-}
-
-.todo-list li:first-child {
-  margin-top: 0px;
+p {
+  padding: 0;
+  margin: 0;
 }

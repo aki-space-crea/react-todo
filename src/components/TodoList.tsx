@@ -1,6 +1,51 @@
 import React, { useState } from "react";
 
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import TextField from "@material-ui/core/TextField";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
 import { TodoType } from "../types/todo";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "& li": {
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+        padding: "16px",
+        marginTop: "8px",
+
+        "&:first-child": {
+          marginRight: "0"
+        }
+      },
+      "& .MuiButtonGroup-root.btn-wrap": {
+        display: "flex",
+        minWidth: "130px",
+
+        "& button": {
+          display: "block",
+          borderRadius: "5px",
+
+          "&:first-child": {
+            marginRight: "8px"
+          }
+        }
+      },
+      "& .show-detail": {
+        display: "block",
+        marginTop: "8px",
+        textAlign: "right",
+        cursor: "pointer",
+        textDecoration: "underline"
+      }
+    }
+  })
+);
 
 type Props = {
   todos: TodoType[];
@@ -25,8 +70,10 @@ const TodoList: React.VFC<Props> = props => {
     setDetailTodo
   } = props;
 
+  const classes = useStyles();
+
   const handleToggleEdit = (
-    e: React.FormEvent<HTMLFormElement | HTMLInputElement>,
+    e: React.FormEvent<HTMLFormElement | HTMLButtonElement>,
     todoIndex: number
   ) => {
     e.preventDefault();
@@ -55,7 +102,7 @@ const TodoList: React.VFC<Props> = props => {
   const [editContactPerson, setEditContactPerson] = useState("");
 
   const handleEditTodo = (
-    e: React.FormEvent<HTMLFormElement | HTMLInputElement>,
+    e: React.FormEvent<HTMLFormElement | HTMLButtonElement>,
     todoIndex: number
   ) => {
     e.preventDefault();
@@ -86,7 +133,7 @@ const TodoList: React.VFC<Props> = props => {
   };
 
   const handleDelete = (
-    e: React.FormEvent<HTMLInputElement>,
+    e: React.FormEvent<HTMLButtonElement>,
     todoIndex: number
   ) => {
     e.preventDefault();
@@ -115,96 +162,126 @@ const TodoList: React.VFC<Props> = props => {
   return (
     <>
       <p>todoList</p>
-      <ul className="todo-list">
+      <List className={classes.root}>
         {todos.map((todo, todoIndex) => {
           const edit = todo.edit;
+
           return (
-            <li key={todo.id} onClick={() => changeDetail(todoIndex)}>
-              {todo.tit}
-              {todo.edit ? (
-                <>
-                  <div className="input-area">
-                    <label>タイトル</label>
-                    <input
-                      type="text"
-                      value={editTit}
-                      placeholder={todos[todoIndex].tit}
-                      required
-                      onChange={e => {
-                        setEditTit(e.target.value);
-                      }}
-                    />
-                  </div>
-                  <div className="input-area">
-                    <label>詳細</label>
-                    <textarea
-                      name=""
-                      id=""
-                      cols={30}
-                      rows={10}
-                      value={editDetailText}
-                      placeholder={todos[todoIndex].detailText}
-                      required
-                      onChange={e => {
-                        setEditDetailText(e.target.value);
-                      }}
-                    ></textarea>
-                  </div>{" "}
-                  <div className="input-area">
-                    <label>担当者</label>
-                    <input
-                      type="text"
-                      value={editContactPerson}
-                      placeholder={todos[todoIndex].contactPerson}
-                      required
-                      onChange={e => {
-                        setEditContactPerson(e.target.value);
-                      }}
-                    />
-                    <input
-                      type="button"
-                      onClick={e => {
-                        handleEditTodo(e, todoIndex);
-                      }}
-                      value="完了"
-                    />
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
-              <form>
-                {edit ? (
-                  <input
-                    type="button"
-                    onClick={e => {
-                      handleToggleEdit(e, todoIndex);
-                    }}
-                    value="キャンセル"
-                  />
+            <ListItem key={todo.id}>
+              <Box display="flex" width="100%">
+                <Box width="100%">
+                  <p>{todo.tit}</p>
+                </Box>
+                {todo.edit ? (
+                  <Box display="flex" flexWrap="wrap" width="100%">
+                    <Box width="100%">
+                      <TextField
+                        required
+                        id="outlined-required"
+                        label="タイトル"
+                        placeholder={todos[todoIndex].tit}
+                        variant="outlined"
+                        value={editTit}
+                        onChange={e => {
+                          setEditTit(e.target.value);
+                        }}
+                      />
+                    </Box>
+                    <Box width="100%" mt={2}>
+                      <TextField
+                        required
+                        id="outlined-required"
+                        label="詳細"
+                        placeholder="詳細を入力してください"
+                        variant="outlined"
+                        value={editDetailText}
+                        multiline
+                        rows={4}
+                        onChange={e => {
+                          setEditDetailText(e.target.value);
+                        }}
+                      />
+                    </Box>
+                    <Box width="100%" mt={2}>
+                      <TextField
+                        required
+                        id="outlined-required"
+                        label="担当者"
+                        placeholder="担当者を入力してください"
+                        variant="outlined"
+                        value={editContactPerson}
+                        onChange={e => {
+                          setEditContactPerson(e.target.value);
+                        }}
+                      />
+                      <Box display="flex" justifyContent="flex-end" mt={1}>
+                        <Box mr={1}>
+                          <Button
+                            onClick={e => {
+                              handleEditTodo(e, todoIndex);
+                            }}
+                            variant="contained"
+                            color="primary"
+                          >
+                            完了
+                          </Button>
+                        </Box>
+                        <Box>
+                          <Button
+                            onClick={e => {
+                              handleToggleEdit(e, todoIndex);
+                            }}
+                            variant="contained"
+                            color="secondary"
+                          >
+                            キャンセル
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
                 ) : (
-                  <>
-                    <input
-                      type="button"
-                      onClick={e => {
-                        handleToggleEdit(e, todoIndex);
-                      }}
-                      value="編集"
-                    />
-                    <input
-                      type="button"
-                      onClick={e => {
-                        handleDelete(e, todoIndex);
-                      }}
-                      value="削除"
-                    />
-                  </>
+                  ""
                 )}
-              </form>
-            </li>
+                <form>
+                  {edit ? (
+                    ""
+                  ) : (
+                    <Box>
+                      <ButtonGroup className="btn-wrap">
+                        <Button
+                          onClick={e => {
+                            handleToggleEdit(e, todoIndex);
+                          }}
+                          variant="contained"
+                          color="primary"
+                        >
+                          編集
+                        </Button>
+                        <Button
+                          onClick={e => {
+                            handleDelete(e, todoIndex);
+                          }}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          削除
+                        </Button>
+                      </ButtonGroup>
+                      <p
+                        className="show-detail"
+                        onClick={() => changeDetail(todoIndex)}
+                      >
+                        詳細を見る
+                      </p>
+                    </Box>
+                  )}
+                </form>
+              </Box>
+            </ListItem>
           );
         })}
-      </ul>
+      </List>
     </>
   );
 };
