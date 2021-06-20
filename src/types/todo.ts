@@ -1,5 +1,9 @@
 export type TodoType = {
-  value: string;
+  day: string;
+  upDateDay?: string;
+  tit: string;
   id: number;
   edit: boolean;
+  detailText: string;
+  contactPerson: string;
 };
